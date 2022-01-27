@@ -1,0 +1,56 @@
+* {
+  text-align: center;
+}
+
+body {
+  background-color: darkslategray;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.startButton {
+  border: yellow 5px solid;
+  color: black;
+  background-color: darkgray;
+  border-radius: 8px;
+  font-size: 28px;
+  margin: 25px;
+  padding: 10px;
+}
+
+.container {
+  width: 500px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-content: center;
+}
+
+.option {
+  width: 200px;
+  height: 200px;
+  border: 5px black solid;
+  transition: all 0.2s ease;
+}
+
+#one {
+  background-color: red;
+}
+
+#two {
+  background-color: blue;
+}
+
+#three {
+  background-color: green;
+}
+
+#four {
+  background-color: orange;
+}
+
+.playing {
+  transform: scale(1.1);
+}
