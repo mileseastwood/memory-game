@@ -2,46 +2,45 @@
     MEMORIZER GAME
 
     Miles Eastwood --- Jan 2022
+
+    A game to test your memory! What round can you get to?
+    To play, press the Start Round button at the top of the screen.
+    Watch the pattern, and repeat it by clicking on the squares in the same sequence.
 */
 
 const startButton = document.querySelector("button");
-const optionOne = document.querySelector("#one");
-const optionTwo = document.querySelector("#two");
-const optionThree = document.querySelector("#three");
-const optionFour = document.querySelector("#four");
-
 const options = document.querySelectorAll(".option");
-options.forEach((opt) => opt.addEventListener("transitionend", removeTrans));
+const sounds = document.querySelectorAll("audio");
+const textBox = document.querySelector(".textbox");
 
 let roundNum = 1;
 let roundLen = 2;
 let userSeq = [];
 let seq = [];
 
-const fun = (e) => playRound(roundLen);
+options.forEach((opt) => opt.addEventListener("transitionend", removeTransOpt));
+textBox.addEventListener("transitionend", removeTransText);
 
-const makeOptionsPlayable = (e) => {
-  e.target.classList.add("playing");
-  userSeq.push(idToNum(e.target.id));
-  console.log(userSeq);
-  if (userSeq.length == roundLen) endRound();
-};
+startButton.addEventListener("click", playRound);
 
-startButton.addEventListener("click", fun);
+function playRound() {
+  startButton.removeEventListener("click", playRound);
 
-function playRound(n) {
-  startButton.removeEventListener("click", fun);
-
-  for (var i = 0; i < n; i++) {
-    seq.push(Math.floor(Math.random() * 4));
-  }
+  for (var i = 0; i < roundLen; i++) seq.push(Math.floor(Math.random() * 4));
 
   var i = 0;
   var int;
+
+  // this plays the animation for the current sequence
   int = setInterval(() => {
+    var s = sounds[seq[i]];
+    s.pause();
+    s.currentTime = 0;
+    s.play();
     options[seq[i]].classList.add("playing");
     i += 1;
     if (i == seq.length) {
+      sounds[seq[i - 1]].currentTime = 0;
       userSeq = [];
       options.forEach((opt) =>
         opt.addEventListener("click", makeOptionsPlayable)
@@ -52,22 +51,44 @@ function playRound(n) {
 }
 
 function endRound() {
+  textBox.classList.add("input");
   if (!arrEqual(seq, userSeq)) {
-    alert("You lost! Please try again");
+    textBox.textContent = "You lost! Back to round one!";
     roundNum = 1;
   } else {
-    alert("You win! On to the next round!");
+    textBox.textContent = "Nice one! On to the next round!";
     roundNum += 1;
   }
   options.forEach((opt) =>
     opt.removeEventListener("click", makeOptionsPlayable)
   );
-  startButton.addEventListener("click", fun);
+  startButton.addEventListener("click", playRound);
   startButton.textContent = `Start Round ${roundNum}`;
   seq = [];
   userSeq = [];
-  roundLen = roundNum * 2;
+  roundLen = roundNum + 1;
 }
+
+function removeTransOpt(e) {
+  if (e.propertyName !== "transform") return;
+  this.classList.remove("playing");
+}
+
+function removeTransText(e) {
+  if (e.propertyName !== "transform") return;
+  this.classList.remove("input");
+}
+
+const makeOptionsPlayable = (e) => {
+  var num = e.target.id;
+  var s = sounds[idToNum(num)];
+  s.pause();
+  s.currentTime = 0;
+  s.play();
+  e.target.classList.add("playing");
+  userSeq.push(idToNum(num));
+  if (userSeq.length == roundLen) endRound();
+};
 
 function arrEqual(a1, a2) {
   for (var i = 0; i < roundLen; i++) {
@@ -87,9 +108,4 @@ function idToNum(str) {
     case "four":
       return 3;
   }
-}
-
-function removeTrans(e) {
-  if (e.propertyName !== "transform") return;
-  this.classList.remove("playing");
 }

@@ -10,13 +10,33 @@ body {
 }
 
 .startButton {
-  border: yellow 5px solid;
+  /*border: yellow 5px solid;*/
   color: black;
   background-color: darkgray;
   border-radius: 8px;
   font-size: 28px;
   margin: 25px;
   padding: 10px;
+}
+
+.startButton:hover {
+  transform: scale(1.1);
+  transition: 0.1s ease;
+  box-shadow: 0 0 5px 5px yellow;
+}
+
+.textbox {
+  margin: 25px;
+  padding: 8px;
+  font-size: 28px;
+  background: darkgray;
+  border-radius: 5px;
+  border: 5px solid #2b2727;
+  transition: 0.1s ease;
+}
+
+.textbox.input {
+  transform: scale(1.1);
 }
 
 .container {
@@ -33,7 +53,13 @@ body {
   height: 200px;
   border: 5px black solid;
   transition: all 0.2s ease;
+  border-radius: 10px;
 }
+
+/*
+.option.normal:hover {
+  transform: scale(1.05);
+}*/
 
 #one {
   background-color: red;
@@ -53,4 +79,5 @@ body {
 
 .playing {
   transform: scale(1.1);
+  box-shadow: 0 0 20px 20px #fff;
 }
